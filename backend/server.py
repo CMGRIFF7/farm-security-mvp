@@ -1,8 +1,11 @@
 # Flask-SocketIO Backend Integration for Farm Security System
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
 import json
-import os
 from time import time, localtime
 
 from notifier import send_alert
