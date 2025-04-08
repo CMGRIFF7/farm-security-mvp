@@ -11,6 +11,9 @@ export default function Dashboard() {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
+    socket.on('connect', () => {
+      console.log('✅ Socket connected to backend');
+    });
     socket.on('alert', (data) => {
       setAlerts((prev) => [data, ...prev.slice(0, 4)]);
     });
