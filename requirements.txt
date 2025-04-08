@@ -1,5 +1,6 @@
 # Core backend
 flask==2.3.3
+flask-cors
 flask-socketio==5.3.6
 eventlet==0.33.3
 
