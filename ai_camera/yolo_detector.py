@@ -1,5 +1,6 @@
 from ultralytics import YOLO
 from ultralytics.nn.tasks import DetectionModel
+from ultralytics.nn.modules import Conv
 from torch.nn import Sequential, Conv2d, BatchNorm2d, Linear
 import torch.serialization
 
@@ -10,6 +11,7 @@ torch.serialization.add_safe_globals({
     Conv2d: Conv2d,
     BatchNorm2d: BatchNorm2d,
     Linear: Linear,
+    Conv: Conv,
 })
 
 # Load the YOLOv8 model
