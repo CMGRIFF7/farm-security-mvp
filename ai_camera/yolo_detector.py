@@ -1,6 +1,6 @@
 from ultralytics import YOLO
 from ultralytics.nn.tasks import DetectionModel
-from torch.nn import Sequential
+from torch.nn import Sequential, Conv2d, BatchNorm2d, Linear
 import torch.serialization
 
 # ✅ Allowlist trusted globals required for YOLOv8
