@@ -1,11 +1,15 @@
 from ultralytics import YOLO
 from ultralytics.nn.tasks import DetectionModel
+from torch.nn import Sequential
 import torch.serialization
 
-# ✅ Register the class object, not a string
-torch.serialization.add_safe_globals({DetectionModel: DetectionModel})
+# ✅ Allowlist trusted globals required for YOLOv8
+torch.serialization.add_safe_globals({
+    DetectionModel: DetectionModel,
+    Sequential: Sequential
+})
 
-# Now you can load the model safely
+# Load the YOLOv8 model
 model = YOLO("yolov8n.pt")
 
 def detect_objects(frame):
