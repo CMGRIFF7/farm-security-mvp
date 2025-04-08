@@ -6,6 +6,6 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
   build: {
-    outDir: "dist", // ✅ explicitly set for Vercel to recognize
+    outDir: 'dist', // ✅ explicitly set for Vercel to recognize
   },
 });
