@@ -5,15 +5,13 @@ import json
 import os
 from time import time, localtime
 
-# Local imports (assuming they exist in backend/)
-from backend.notifier import send_alert
-from backend.alert_engine import should_trigger_alert
+from notifier import send_alert
+from alert_engine import should_trigger_alert
 from ai_camera.camera_stream_handler import capture_frame
 from ai_camera.yolo_detector import detect_objects
 from rfid.movement_logger import log_movement
 from rfid.rfid_reader_interface import read_rfid_tag
 from rfid.geofence_logic import is_within_allowed_hours
-
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
