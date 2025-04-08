@@ -38,8 +38,14 @@ def simulate_rfid_event():
     log_movement(tag_id, timestamp)
 
     if not is_within_allowed_hours(localtime(timestamp)):
-        frame = capture_frame()
-        detected_classes, _ = detect_objects(frame)
+        try:
+            frame = capture_frame()
+            detected_classes, _ = detect_objects(frame)
+        except Exception as e:
+            print("[WARNING] Frame capture or detection failed:", e)
+            detected_classes = []
+            frame = None
+
         if should_trigger_alert(tag_id, timestamp, detected_classes):
             send_alert(tag_id, frame)
             socketio.emit('alert', {
