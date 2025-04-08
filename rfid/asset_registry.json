@@ -1,0 +1,5 @@
+# {
+    #   "TAG123": {"name": "Tractor A", "type": "vehicle"},
+    #   "TAG456": {"name": "Toolbox", "type": "tool"},
+    #   "TAG789": {"name": "Cow 12", "type": "livestock"}
+    # }

@@ -1,0 +1,18 @@
+# Core backend
+flask==2.3.3
+flask-socketio==5.3.6
+eventlet==0.33.3
+
+# REST API and WebSocket support
+requests==2.31.0
+
+# Computer Vision
+opencv-python==4.9.0.80
+ultralytics==8.0.198
+
+# Utility libraries
+numpy==1.24.4
+Pillow==10.2.0
+
+# Optional: system process utilities
+psutil==5.9.8
