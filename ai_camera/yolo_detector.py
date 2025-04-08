@@ -18,7 +18,7 @@ torch.serialization.add_safe_globals({
 })
 
 # ✅ Load the raw YOLOv8 checkpoint directly
-ckpt = torch.load("yolov8n.pt", map_location="cpu", weights_only=False)
+ckpt = torch.load("ai_camera/yolov8n.pt", map_location="cpu", weights_only=False)
 model = ckpt["model"]
 model.eval()
 
