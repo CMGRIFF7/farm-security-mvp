@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO
-import os
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import json
 from time import time, localtime
 
