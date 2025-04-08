@@ -56,9 +56,18 @@ def simulate_rfid_event():
 
     return {"status": "OK", "tag_id": tag_id}
 
-@socketio.on("connect")
-def on_connect():
-    print("Client connected")
+@socketio.on('connect')
+def handle_connect():
+    print("[Socket] Client connected")
+
+@app.route("/api/simulate", methods=["GET"])
+def simulate_rfid_event():
+    ...
+    socketio.emit("alert", "Simulated Alert")
+    socketio.emit("asset_update", {"id": "TAG123", "status": "moved"})
+    socketio.emit("log", "Simulated RFID and detection event")
+    ...
+
 
 @socketio.on("disconnect")
 def on_disconnect():
