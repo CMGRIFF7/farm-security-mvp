@@ -1,4 +1,9 @@
 from ultralytics import YOLO
+import torch.serialization
+
+# Add safe global for YOLO's DetectionModel class
+from ultralytics.nn.tasks import DetectionModel
+torch.serialization.add_safe_globals({'ultralytics.nn.tasks.DetectionModel': DetectionModel})
 
 model = YOLO("yolov8n.pt")
 
