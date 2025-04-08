@@ -1,14 +1,13 @@
 # ai_camera/yolo_detector.py
 
-from ultralytics import YOLO
+import cv2
+import torch
 from ultralytics.nn.tasks import DetectionModel
 from ultralytics.nn.modules import Conv
 from torch.nn import Sequential, Conv2d, BatchNorm2d, Linear
-import torch
 import torch.serialization
-import cv2
 
-# ✅ Allowlist all required global classes for model unpickling
+# ✅ Allow trusted classes for safe loading
 torch.serialization.add_safe_globals({
     DetectionModel: DetectionModel,
     Conv: Conv,
@@ -18,11 +17,19 @@ torch.serialization.add_safe_globals({
     Linear: Linear,
 })
 
-model = YOLO("yolov8n.pt")
-model.model = torch.load("yolov8n.pt", map_location="cpu", weights_only=False)["model"]
+# ✅ Load the raw YOLOv8 checkpoint directly
+ckpt = torch.load("yolov8n.pt", map_location="cpu", weights_only=False)
+model = ckpt["model"]
+model.eval()
 
 def detect_objects(frame):
-    results = model(frame)
-    names = results[0].names
-    detections = [names[int(cls)] for cls in results[0].boxes.cls]
-    return detections, results[0].boxes.xyxy.cpu().numpy()
+    # ✅ Convert frame to PyTorch format
+    img = cv2.resize(frame, (640, 640))
+    img = torch.from_numpy(img).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+
+    with torch.no_grad():
+        out = model(img)[0]
+
+    boxes = out.cpu().numpy()
+    detections = [str(int(cls)) for cls in out[:, 5]]
+    return detections, boxes
