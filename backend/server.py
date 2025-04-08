@@ -1,10 +1,6 @@
-# Flask-SocketIO Backend Integration for Farm Security System
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from flask import Flask, jsonify, request
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
+import os
 import json
 from time import time, localtime
 
@@ -15,6 +11,7 @@ from ai_camera.yolo_detector import detect_objects
 from rfid.movement_logger import log_movement
 from rfid.rfid_reader_interface import read_rfid_tag
 from rfid.geofence_logic import is_within_allowed_hours
+
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
@@ -32,10 +29,13 @@ def get_logs():
         logs = f.readlines()
         return jsonify([json.loads(line) for line in logs])
 
-@app.route("/api/simulate")
+@app.route("/api/simulate", methods=["GET"])
 def simulate_rfid_event():
     tag_id, timestamp = read_rfid_tag()
     log_movement(tag_id, timestamp)
+
+    socketio.emit("asset_update", {"tag_id": tag_id, "timestamp": timestamp})
+    socketio.emit("log", f"Simulated movement for tag {tag_id}")
 
     if not is_within_allowed_hours(localtime(timestamp)):
         try:
@@ -60,15 +60,6 @@ def simulate_rfid_event():
 def handle_connect():
     print("[Socket] Client connected")
 
-@app.route("/api/simulate", methods=["GET"])
-def simulate_rfid_event():
-    ...
-    socketio.emit("alert", "Simulated Alert")
-    socketio.emit("asset_update", {"id": "TAG123", "status": "moved"})
-    socketio.emit("log", "Simulated RFID and detection event")
-    ...
-
-
 @socketio.on("disconnect")
 def on_disconnect():
     print("Client disconnected")
@@ -76,3 +67,4 @@ def on_disconnect():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     socketio.run(app, host='0.0.0.0', port=port)
+
